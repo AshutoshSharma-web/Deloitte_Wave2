@@ -1,0 +1,141 @@
+--SQL Multi Row Function
+--Aggregate Functions
+
+--Part 1 – Basic Usage
+
+--1.	Display the lowest last name alphabetically (Customers table).
+SELECT MIN(LAST_NAME)
+FROM CUSTOMERS;
+
+--2.	Display the average monthly payment (Packages table).
+SELECT AVG(MONTHLY_PAYMENT)
+FROM PACKAGES;
+
+--3.	Display the highest last name alphabetically (Customers table).
+SELECT MAX(LAST_NAME)
+FROM CUSTOMERS;
+
+--4.	Display the number of internet packages (Packages table).
+SELECT COUNT(PACK_ID) 
+FROM PACKAGES;
+
+--5.	Display the number of records in Customers table.
+SELECT COUNT(CUSTOMER_ID)
+FROM CUSTOMERS;
+
+--6.	Display the number of distinct states (Customers table).
+SELECT COUNT(DISTINCT STATE)
+FROM CUSTOMERS;
+
+--7.	Display the number of distinct internet speeds (Packages table).
+SELECT COUNT(DISTINCT SPEED)
+FROM PACKAGES;
+
+--8.	Display the number of values (exclude Nulls) in Fax column (Customers table).
+SELECT COUNT(FAX)
+FROM CUSTOMERS;
+
+--9.	Display the number of Null values in Fax column (Customers table).
+SELECT COUNT(*)
+FROM CUSTOMERS
+WHERE FAX IS NULL;
+
+--10.	Display the highest, lowest and average monthly discount (Customers table).
+SELECT MIN(MONTHLY_DISCOUNT),
+MAX(MONTHLY_DISCOUNT),
+AVG(MONTHLY_DISCOUNT)
+FROM CUSTOMERS;
+
+--Part 2 – GROUP BY and HAVING clauses
+
+--11.	Display the state and the number of customers for each state (Customers table).
+SELECT STATE, COUNT(CUSTOMER_ID)
+FROM CUSTOMERS
+GROUP BY STATE;
+
+--12.	Display the internet speed and the average monthly payment for each speed (Packages table).
+SELECT SPEED, AVG(MONTHLY_PAYMENT)
+FROM PACKAGES
+GROUP BY SPEED;
+
+--13.	Display the state and the number of distinct cities for each state (Customers table).
+SELECT STATE, COUNT(DISTINCT CITY)
+FROM CUSTOMERS
+GROUP BY STATE;
+
+--14.	Display the sector number and the highest monthly payment for each sector (Packages table).
+SELECT SECTOR_ID, MAX(MONTHLY_PAYMENT)
+FROM PACKAGES
+GROUP BY SECTOR_ID;
+
+--15.	Package number and average monthly discount (Customers table) – 
+--a.	Display the package number and the average monthly discount for each package.
+SELECT PACK_ID, AVG(MONTHLY_DISCOUNT)
+FROM CUSTOMERS
+GROUP BY PACK_ID;
+
+--b.	Display the package number and the average monthly discount for each package, only for packages whose number equals 22 or 13.
+SELECT PACK_ID, AVG(MONTHLY_DISCOUNT)
+FROM CUSTOMERS
+WHERE PACK_ID=22 OR PACK_ID=13
+GROUP BY PACK_ID;
+
+--16.	Display the highest, lowest and average monthly payment for each internet speed (Packages table).
+SELECT MAX(SPEED), MIN(SPEED), AVG(MONTHLY_PAYMENT)
+FROM PACKAGES
+GROUP BY (SPEED);
+
+--17.	The number of customer in each internet package (Customers table) – 
+--a.	Display the package number and the number of customers for each package number.
+SELECT PACK_ID, COUNT(CUSTOMER_ID)
+FROM CUSTOMERS
+GROUP BY PACK_ID;
+
+--b.	Modify the query to display the package number and number of customers for each package number, only for the customers 
+--whose monthly discount is greater than 20.
+SELECT PACK_ID, COUNT(CUSTOMER_ID)
+FROM CUSTOMERS
+WHERE MONTHLY_DISCOUNT>20
+GROUP BY PACK_ID;
+
+--c.	Modify the query to display the package number and number of customers for each package number, only for the packages 
+--with more than 100 customers.
+SELECT PACK_ID, COUNT(CUSTOMER_ID)
+FROM CUSTOMERS
+GROUP BY PACK_ID
+HAVING COUNT(CUSTOMER_ID)>100;
+
+--18.	Display the state, city and number of customers for each state and city.
+SELECT STATE, CITY, COUNT(CUSTOMER_ID)
+FROM CUSTOMERS
+GROUP BY CITY,STATE;
+
+--19.	Cities and the average monthly discount (Customers table) – 
+--a.	Display the city and the average monthly discount for each city
+SELECT CITY, AVG(MONTHLY_DISCOUNT)
+FROM CUSTOMERS
+GROUP BY CITY;
+
+--b.	Display the city and the average monthly discount for each city, only for the customers whose monthly discount is greater than 20
+SELECT CITY, AVG(MONTHLY_DISCOUNT)
+FROM CUSTOMERS
+WHERE MONTHLY_DISCOUNT>20
+GROUP BY CITY;
+
+--20.	States and the lowest monthly discount (Customers table) – 
+--a.	Display the state and the lowest monthly discount for each state.
+SELECT STATE, MIN(MONTHLY_DISCOUNT)
+FROM CUSTOMERS
+GROUP BY STATE;
+
+--b.	Display the state and lowest monthly discount for each state, only for states where the lowest monthly discount is greater than 10
+SELECT STATE, MIN(MONTHLY_DISCOUNT)
+FROM CUSTOMERS
+HAVING MIN(MONTHLY_DISCOUNT)>10
+GROUP BY STATE;
+
+--21.	Display the internet speed and number of package for each internet speed, only for the internet speeds with more than 8 packages.
+SELECT SPEED, COUNT(PACK_ID)
+FROM PACKAGES
+HAVING COUNT(PACK_ID)>8
+GROUP BY SPEED;

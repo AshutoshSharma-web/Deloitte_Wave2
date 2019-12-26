@@ -1,0 +1,102 @@
+--SQL JOIN QUERIES V1
+
+--INNER JOIN
+
+--1.	Customers and internet packages (Customers & Packages tables) – 
+--a.	Write a query to display first name, last name, package number and internet speed for all customers.
+
+SELECT C.FIRST_NAME, C.LAST_NAME, P.PACK_ID, P.SPEED
+FROM CUSTOMERS C, PACKAGES P
+WHERE C.PACK_ID=P.PACK_ID;
+
+--b.	Write a query to display first name, last name, package number and internet speed for all customers whose package 
+--number equals 22 or 27. Order the query in ascending order by last name.
+SELECT C.FIRST_NAME, C.LAST_NAME, P.PACK_ID, P.SPEED
+FROM CUSTOMERS C, PACKAGES P
+WHERE C.PACK_ID = P.PACK_ID and
+P.PACK_ID IN(22,27)
+ORDER BY LAST_NAME;
+
+--2.	Internet packages and sectors – 
+--a.	Display the package number, internet speed, monthly payment and sector name for all packages (Packages and Sectors tables).
+SELECT P.PACK_ID, P.SPEED, P.MONTHLY_PAYMENT, S.SECTOR_NAME
+FROM PACKAGES P, SECTORS S
+WHERE P.SECTOR_ID=S.SECTOR_ID;
+
+--b.	Display the customer name, package number, internet speed, monthly payment and sector name for all customers 
+--(Customers, Packages and Sectors tables).
+SELECT C.FIRST_NAME, C.PACK_ID, P.SPEED, P.MONTHLY_PAYMENT, S.SECTOR_NAME
+FROM CUSTOMERS C, PACKAGES P, SECTORS S
+WHERE C.PACK_ID=P.PACK_ID AND
+P.SECTOR_ID=S.SECTOR_ID;
+
+--c.	Display the customer name, package number, internet speed, monthly payment and sector name for all customers in the 
+--business sector (Customers, Packages and Sectors tables).
+SELECT C.FIRST_NAME, C.PACK_ID, P.SPEED, P.MONTHLY_PAYMENT, S.SECTOR_NAME
+FROM CUSTOMERS C, PACKAGES P, SECTORS S
+WHERE C.PACK_ID=P.PACK_ID AND
+P.SECTOR_ID=S.SECTOR_ID AND
+S.SECTOR_NAME='Business';
+
+--3.	Display the last name, first name, join date, package number, internet speed and sector name for all customers in the 
+--private sector who joined the company in the year 2006.
+SELECT C.LAST_NAME, C.FIRST_NAME, C.JOIN_DATE, P.PACK_ID, P.SPEED, S.SECTOR_NAME
+FROM CUSTOMERS C, PACKAGES P, SECTORS S
+WHERE C.PACK_ID=P.PACK_ID AND
+P.SECTOR_ID=S.SECTOR_ID
+AND S.SECTOR_NAME='Private'
+AND EXTRACT(YEAR FROM C.JOIN_DATE)='2006';
+
+--Non Equi Join
+
+--4.	Display the package number, internet speed, monthly payment and package grade for all packages (Packages and Pack_Grades tables).
+SELECT P.PACK_ID, P.SPEED, P.MONTHLY_PAYMENT, PG.GRADE_NAME
+FROM PACKAGES P, PACK_GRADES PG
+WHERE P.MONTHLY_PAYMENT BETWEEN PG.MIN_PRICE AND PG.MAX_PRICE;
+
+--Outer Join
+
+--5.	Customers and internet packages (Customers and Packages tables) 
+--a.	Display the first name, last name, internet speed and monthly payment for all customers. Use INNER JOIN to solve this exercise.
+SELECT C.FIRST_NAME, C.LAST_NAME, P.SPEED, P.MONTHLY_PAYMENT
+FROM PACKAGES P, CUSTOMERS C
+WHERE P.PACK_ID=C.PACK_ID;
+
+--b.	Modify last query to display all customers, including those without any internet package.
+SELECT C.FIRST_NAME, C.LAST_NAME, P.SPEED, P.MONTHLY_PAYMENT
+FROM CUSTOMERS C, PACKAGES P
+WHERE C.PACK_ID=P.PACK_ID(+);
+
+--c.	Modify last query to display all packages, including those without any customers.
+SELECT C.FIRST_NAME, C.LAST_NAME, P.SPEED, P.MONTHLY_PAYMENT
+FROM CUSTOMERS C, PACKAGES P
+WHERE P.PACK_ID=C.PACK_ID(+);
+
+--d.	Modify last query to display all packages and all customers.
+SELECT C.FIRST_NAME, C.LAST_NAME, P.SPEED, P.MONTHLY_PAYMENT
+FROM CUSTOMERS C
+FULL OUTER JOIN PACKAGES P
+ON C.PACK_ID=P.PACK_ID;
+
+--Self-Join
+
+--6.	Display the last name, first name and package number for all customers who have the same package number as customer 
+--named ‘Amado Taylor’ (Customers table).
+SELECT A.LAST_NAME, A.FIRST_NAME, A.PACK_ID
+FROM CUSTOMERS A, CUSTOMERS B
+WHERE A.FIRST_NAME='Amado' AND A.LAST_NAME='Taylor'
+AND A.PACK_ID=B.PACK_ID;
+
+--7.	Display the last name, first name and monthly discount for all customers whose monthly discount is lower than the --
+--monthly discount of employee number 103 (Customers table).
+SELECT A.LAST_NAME, A.FIRST_NAME, A.MONTHLY_DISCOUNT
+FROM CUSTOMERS A, CUSTOMERS B
+WHERE A.CUSTOMER_ID=103 AND
+B.MONTHLY_DISCOUNT<A.MONTHLY_DISCOUNT;
+
+--8.	Display the package number and internet speed for all packages whose internet speed is equal to the internet speed 
+--of package number 10 (Packages table).
+SELECT A.PACK_ID, A.SPEED 
+FROM PACKAGES A, PACKAGES B
+WHERE A.PACK_ID=10 AND
+A.SPEED=B.SPEED;
