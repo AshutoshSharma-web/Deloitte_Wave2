@@ -1,0 +1,110 @@
+--Practice SQL Subqueries_V2
+
+--SQL Subqueries Practice
+
+--1.	Display the first name and salary for all employees who earn more than employee number 103 (Employees table).
+SELECT FIRST_NAME, SALARY
+FROM TBLEMPLOYEES
+WHERE SALARY>(SELECT SALARY
+              FROM TBLEMPLOYEES
+              WHERE EMPLOYEE_ID=103);
+              
+--2.	Display the department number and department name for all departments whose location number is equal to the location 
+--number of department number 90 (Departments table).            
+SELECT DEPARTMENT_ID, DEPARTMENT_NAME
+FROM TBLDEPARTMENTS
+WHERE LOCATION_ID=(SELECT LOCATION_ID
+                   FROM TBLDEPARTMENTS
+                   WHERE DEPARTMENT_ID=90);
+                   
+--3.	Display the last name and hire date for all employees who was hired after employee number 101 (Employees table).
+SELECT LAST_NAME, HIRE_DATE
+FROM TBLEMPLOYEES
+WHERE HIRE_DATE>(SELECT HIRE_DATE
+                 FROM TBLEMPLOYEES
+                 WHERE EMPLOYEE_ID=101);
+                 
+--4.	Display the first name, last name, and department number for all employees who work in Sales department 
+--(Employees and Departments table).                 
+SELECT E.FIRST_NAME, E.LAST_NAME, D.DEPARTMENT_ID
+FROM TBLEMPLOYEES E, TBLDEPARTMENTS D
+WHERE E.DEPARTMENT_ID=D.DEPARTMENT_ID
+AND D.DEPARTMENT_NAME=(SELECT DEPARTMENT_NAME
+                       FROM TBLDEPARTMENTS
+                       WHERE DEPARTMENT_NAME='Sales');
+
+--5.	Display the department number and department name for all departments located in Toronto (Departments table).
+SELECT DEPARTMENT_ID, DEPARTMENT_NAME
+FROM TBLDEPARTMENTS
+WHERE LOCATION_ID=(SELECT LOCATION_ID
+            FROM TBLLOCATIONS
+            WHERE CITY='Toronto');
+            
+--6.	Display the first name, salary and department number for all employees who work in the department as employee number 124 
+--(Employees table).            
+SELECT FIRST_NAME, SALARY, DEPARTMENT_ID
+FROM TBLEMPLOYEES
+WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID
+                     FROM TBLEMPLOYEES
+                     WHERE EMPLOYEE_ID=124 OR MANAGER_ID=124);
+                     
+--7.	Display the first name, salary, and department number for all employees who earn more than the average salary (Employees table).
+SELECT FIRST_NAME, SALARY, DEPARTMENT_ID
+FROM TBLEMPLOYEES
+WHERE SALARY>(SELECT AVG(SALARY)
+              FROM TBLEMPLOYEES);
+              
+--8.	Display the first name, salary, and department number for all employees whose salary equals one of the salaries in 
+--department number 20 (Employees table).            
+SELECT FIRST_NAME, SALARY, DEPARTMENT_ID
+FROM TBLEMPLOYEES
+WHERE SALARY IN(SELECT SALARY
+              FROM TBLEMPLOYEES
+              WHERE DEPARTMENT_ID=20);
+              
+--9.	Display the first name, salary, and department number for all employees who earn more than maximum salary in department 
+--number 50 (Employees table).
+SELECT FIRST_NAME, SALARY, DEPARTMENT_ID
+FROM TBLEMPLOYEES 
+WHERE SALARY>(SELECT MAX(SALARY)
+              FROM TBLEMPLOYEES
+              WHERE DEPARTMENT_ID=50);
+            
+--10.	Display the first name, salary, and department number for all employees who earn more than the minimum salary in 
+--department number 60 (Employees table).
+SELECT FIRST_NAME, SALARY, DEPARTMENT_ID
+FROM TBLEMPLOYEES
+WHERE SALARY>(SELECT MIN(SALARY)
+              FROM TBLEMPLOYEES
+              WHERE DEPARTMENT_ID=60);
+              
+--11.	Display the first name, salary, and department number for all employees who earn less than the minimum salary of 
+--department number 90 (Employees table).        
+SELECT FIRST_NAME, SALARY, DEPARTMENT_ID
+FROM TBLEMPLOYEES
+WHERE SALARY<(SELECT MIN(SALARY)
+              FROM TBLEMPLOYEES
+              WHERE DEPARTMENT_ID=90);
+              
+--12.	Display the first name, salary and department number for all employees whose department is located Seattle 
+--(Employees, Departments and Locations table).            
+SELECT FIRST_NAME, SALARY, DEPARTMENT_ID 
+FROM TBLEMPLOYEES
+WHERE DEPARTMENT_ID IN(SELECT DEPARTMENT_ID
+                     FROM TBLDEPARTMENTS
+                     WHERE LOCATION_ID=(SELECT LOCATION_ID
+                                        FROM TBLLOCATIONS
+                                        WHERE CITY='Seattle'));
+
+--13.	Display the first name, salary, and department number for all employees who earn less than the average salary, and 
+--also work at the same department as employee whose first name is Kevin
+SELECT FIRST_NAME, SALARY, DEPARTMENT_ID
+FROM TBLEMPLOYEES
+WHERE SALARY<(SELECT AVG(SALARY)
+              FROM TBLEMPLOYEES)
+AND DEPARTMENT_ID=(SELECT DEPARTMENT_ID
+                   FROM TBLEMPLOYEES
+                   WHERE FIRST_NAME='Kevin');
+
+                                    
+            

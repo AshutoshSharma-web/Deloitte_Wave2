@@ -1,0 +1,75 @@
+--Practice SQL JOIN Methods_V2
+--Inner JOIN Practice
+--1.	Employees and departments  (Employees & Departments tables) 
+--a.	For each employee, display the first name, last name, department number and department name.
+SELECT E.FIRST_NAME, E.LAST_NAME, E.DEPARTMENT_ID, D.DEPARTMENT_NAME
+FROM TBLEMPLOYEES E, TBLDEPARTMENTS D
+WHERE E.DEPARTMENT_ID=D.DEPARTMENT_ID;
+
+
+--b.	Display the first name, last name, department number and department name, for all employees in departments 50 or 90.
+SELECT E.FIRST_NAME, E.LAST_NAME, E.DEPARTMENT_ID, D.DEPARTMENT_NAME
+FROM TBLEMPLOYEES E, TBLDEPARTMENTS D
+WHERE E.DEPARTMENT_ID=D.DEPARTMENT_ID
+AND E.DEPARTMENT_ID IN(50,90);
+
+--2.	Departments and locations (Departments, Employees & Locations tables) 
+--a.	For each department, display the department name, city, and state province.
+SELECT D.DEPARTMENT_NAME, L.CITY, STATE_PROVINCE
+FROM  TBLDEPARTMENTS D, TBLLOCATIONS L
+WHERE D.LOCATION_ID=L.LOCATION_ID;
+--b.	For each employee, display the full name, department name, city, and state province.
+SELECT E.FIRST_NAME||'_'||E.LAST_NAME AS FULL_NAME, D.DEPARTMENT_NAME, L.CITY, L.STATE_PROVINCE
+FROM TBLEMPLOYEES E,TBLDEPARTMENTS D, TBLLOCATIONS L
+WHERE E.DEPARTMENT_ID=D.DEPARTMENT_ID
+AND D.LOCATION_ID=L.LOCATION_ID;
+--c.	Display the full name, department name, city, and state province, for all employees whose last name contains the letter a.
+SELECT E.FIRST_NAME||'_'||E.LAST_NAME AS FULL_NAME, D.DEPARTMENT_NAME, L.CITY, L.STATE_PROVINCE
+FROM TBLEMPLOYEES E, TBLDEPARTMENTS D, TBLLOCATIONS L
+WHERE E.DEPARTMENT_ID=D.DEPARTMENT_ID
+AND D.LOCATION_ID=L.LOCATION_ID
+AND E.LAST_NAME LIKE '%a';
+
+--None Equi JOIN Practice
+
+--3.	For each employee, display the first name, salary, and job grade (Employees & Job_Grades tables)
+
+--Outer JOIN Practice
+
+--4.	Employees & departments 
+--a.	Display the first name, last name, department number and department name, for all employees including those without any department.
+SELECT E.FIRST_NAME, E.LAST_NAME, E.DEPARTMENT_ID, D.DEPARTMENT_NAME
+FROM TBLEMPLOYEES E, TBLDEPARTMENTS D
+WHERE E.DEPARTMENT_ID=D.DEPARTMENT_ID(+); 
+
+--b.	Modify your query to display all departments including departments without any employees.
+SELECT E.FIRST_NAME, E.LAST_NAME, E.DEPARTMENT_ID, D.DEPARTMENT_NAME
+FROM TBLEMPLOYEES E, TBLDEPARTMENTS D
+WHERE E.DEPARTMENT_ID(+)=D.DEPARTMENT_ID;
+
+--Self JOIN Practice
+
+--5.	Employees and managers (Employees table) 
+--a.	For each employee, display the last name, and the manager’s last name.
+SELECT E.LAST_NAME, F.LAST_NAME AS MANAGER_LAST_NAME
+FROM TBLEMPLOYEES E, TBLEMPLOYEES F
+WHERE E.MANAGER_ID=F.EMPLOYEE_ID;
+
+--b.	Modify your query to display all employees including those without any manager.
+SELECT E.LAST_NAME, F.LAST_NAME AS MANAGER_LAST_NAME
+FROM TBLEMPLOYEES E, TBLEMPLOYEES F
+WHERE E.MANAGER_ID=F.EMPLOYEE_ID(+);
+
+--6.	Display the first name, last name, and department number for all employees who work in the same department as employee 
+--whose last name is “King”.
+SELECT E.FIRST_NAME, E.LAST_NAME, E.DEPARTMENT_ID
+FROM TBLEMPLOYEES E, TBLEMPLOYEES F
+WHERE E.DEPARTMENT_ID=F.DEPARTMENT_ID AND
+F.LAST_NAME='King';
+
+--7.	Display the last name and salary for all employees who earn less than employee number 103.
+SELECT E.LAST_NAME, E.SALARY
+FROM TBLEMPLOYEES E, TBLEMPLOYEES F
+WHERE F.EMPLOYEE_ID=103 AND
+E.SALARY<F.SALARY;
+
