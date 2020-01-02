@@ -1,0 +1,107 @@
+/*1) Run the statement in the lab_09_01.sql script to build the MY_EMPLOYEE table
+used in this practice.
+2) Describe the structure of the MY_EMPLOYEE table to identify the column names.*/
+
+CREATE TABLE MYEMPLOYEE
+(ID NUMBER(4) NOT NULL, 
+LAST_NAME VARCHAR2(25),
+FIRST_NAME VARCHAR2(25), 
+USERID VARCHAR2(8),
+SALARY NUMBER(9,2));
+
+/*3) Create an INSERT statement to add the first row of data to the MY_EMPLOYEE table
+from the following sample data. Do not list the columns in the INSERT clause. Do not
+enter all rows yet.*/
+
+INSERT INTO MYEMPLOYEE VALUES(1, 'Patel', 'Ralph', 'rpatel', 895);
+
+--4) Populate the MY_EMPLOYEE table with the second row of the sample data from the
+--preceding list. This time, list the columns explicitly in the INSERT clause.
+
+INSERT INTO MYEMPLOYEE(ID, LAST_NAME, FIRST_NAME, USERID, SALARY)
+VALUES(2, 'Dancs', 'Betty', 'bdancs', 860);
+
+--5) Confirm your addition to the table.
+SELECT *
+FROM MYEMPLOYEE;
+
+/*6) Write an INSERT statement in a dynamic reusable script file to load the remaining
+rows into the MY_EMPLOYEE table. The script should prompt for all the columns (ID,
+LAST_NAME, FIRST_NAME, USERID, and SALARY). Save this script to a
+lab_09_06.sql file.*/
+INSERT INTO MYEMPLOYEE(ID, LAST_NAME, FIRST_NAME, USERID, SALARY)
+VALUES(&ID, '&LAST_NAME', '&FIRST_NAME', '&USERID', '&SALARY');
+
+--7) Populate the table with the next two rows of the sample data listed in step 3 by
+--running the INSERT statement in the script that you created.
+INSERT INTO MYEMPLOYEE(ID, LAST_NAME, FIRST_NAME, USERID, SALARY)
+VALUES(&ID, '&LAST_NAME', '&FIRST_NAME', '&USERID', '&SALARY');
+
+--8) Confirm your additions to the table.
+SELECT *
+FROM MYEMPLOYEE;
+
+--9) Make the data additions permanent.
+COMMIT;
+
+--Update and delete data in the MY_EMPLOYEE table.
+
+--10) Change the last name of employee 3 to Drexler.
+UPDATE MYEMPLOYEE SET LAST_NAME='Drexler'
+WHERE ID=3;
+
+--11) Change the salary to $1,000 for all employees who have a salary less than $900.
+UPDATE MYEMPLOYEE SET SALARY=1000
+WHERE SALARY<900;
+
+--12) Verify your changes to the table.
+SELECT *
+FROM MYEMPLOYEE;
+
+--13) Delete Betty Dancs from the MY_EMPLOYEE table.
+DELETE FROM MYEMPLOYEE
+WHERE FIRST_NAME='Betty';
+
+--14) Confirm your changes to the table.
+COMMIT;
+
+--15) Commit all pending changes.
+COMMIT;
+
+--Control data transaction to the MY_EMPLOYEE table.
+
+/*16) Populate the table with the last row of the sample data listed in step 3 by using the
+statements in the script that you created in step 6. Run the statements in the script.*/
+INSERT INTO MYEMPLOYEE(ID, LAST_NAME, FIRST_NAME, USERID, SALARY)
+VALUES(&ID, '&LAST_NAME', '&FIRST_NAME', '&USERID', '&SALARY');
+
+--17) Confirm your addition to the table.
+SELECT *
+FROM MYEMPLOYEE;
+
+--18) Mark an intermediate point in the processing of the transaction.
+SAVEPOINT SAVE1;
+
+--19) Delete all the rows from the MY_EMPLOYEE table.
+DELETE FROM MYEMPLOYEE;
+
+--20) Confirm that the table is empty.
+SELECT* FROM MYEMPLOYEE;
+
+--21) Discard the most recent DELETE operation without discarding the earlier INSERT operation.
+ROLLBACK TO SAVE1;
+
+--22) Confirm that the new row is still intact.
+SELECT *
+FROM MYEMPLOYEE;
+
+--23) Make the data addition permanent.
+COMMIT;
+
+/*24) Modify the lab_09_06.sql script such that the USERID is generated automatically
+by concatenating the first letter of the first name and the first seven characters of the
+last name. The generated USERID must be in lowercase. Therefore, the script should
+not prompt for the USERID. Save this script to a file named lab_09_24.sql.*/
+INSERT INTO MYEMPLOYEE(ID, LAST_NAME, FIRST_NAME, USERID, SALARY)
+VALUES(&ID, '&LAST_NAME', '&FIRST_NAME', LOWER(SUBSTR('&FIRST_NAME',1,1)||SUBSTR('&LAST_NAME',1,7)), '&SALARY');
+commit;
